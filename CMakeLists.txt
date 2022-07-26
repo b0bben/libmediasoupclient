@@ -130,7 +130,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 # Public (interface) dependencies.
 target_link_libraries(${PROJECT_NAME} PUBLIC
 	sdptransform
-	${LIBWEBRTC_BINARY_PATH}/libwebrtc${CMAKE_STATIC_LIBRARY_SUFFIX}
+	${LIBWEBRTC_BINARY_PATH}/${CMAKE_STATIC_LIBRARY_PREFIX}webrtc${CMAKE_STATIC_LIBRARY_SUFFIX}
 )
 
 # Compile definitions for libwebrtc.
@@ -141,6 +141,12 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 	$<$<PLATFORM_ID:Windows>:WIN32_LEAN_AND_MEAN>
 	$<$<PLATFORM_ID:Darwin>:WEBRTC_MAC>
 )
+
+# Need because webrtc always compiles statically and including CRT as MT on windows
+if(WIN32 AND NOT MINGW)
+  set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+  target_link_libraries(${PROJECT_NAME}	PRIVATE WS2_32 secur32.lib winmm.lib dmoguids.lib wmcodecdspuuid.lib msdmo.lib strmiids.lib)
+endif()
 
 install(TARGETS mediasoupclient DESTINATION lib)
 install(FILES ${HEADER_FILES} DESTINATION include/mediasoupclient)
