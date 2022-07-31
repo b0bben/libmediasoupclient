@@ -130,7 +130,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 # Public (interface) dependencies.
 target_link_libraries(${PROJECT_NAME} PUBLIC
 	sdptransform
-	${LIBWEBRTC_BINARY_PATH}/${CMAKE_STATIC_LIBRARY_PREFIX}webrtc${CMAKE_STATIC_LIBRARY_SUFFIX}
+  ${LIBWEBRTC_BINARY_PATH}
 )
 
 # Compile definitions for libwebrtc.
@@ -139,6 +139,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 	$<$<PLATFORM_ID:Windows>:WEBRTC_WIN>
 	$<$<PLATFORM_ID:Windows>:NOMINMAX>
 	$<$<PLATFORM_ID:Windows>:WIN32_LEAN_AND_MEAN>
+  $<$<PLATFORM_ID:Windows>:_ALLOW_ITERATOR_DEBUG_LEVEL_MISMATCH>
 	$<$<PLATFORM_ID:Darwin>:WEBRTC_MAC>
 )
 
