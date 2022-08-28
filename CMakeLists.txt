@@ -139,15 +139,12 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 	$<$<PLATFORM_ID:Windows>:WEBRTC_WIN>
 	$<$<PLATFORM_ID:Windows>:NOMINMAX>
 	$<$<PLATFORM_ID:Windows>:WIN32_LEAN_AND_MEAN>
-  $<$<PLATFORM_ID:Windows>:_ALLOW_ITERATOR_DEBUG_LEVEL_MISMATCH>
 	$<$<PLATFORM_ID:Darwin>:WEBRTC_MAC>
-)
 
-# Need because webrtc always compiles statically and including CRT as MT on windows
-if(WIN32 AND NOT MINGW)
-  set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-  target_link_libraries(${PROJECT_NAME}	PRIVATE WS2_32 secur32.lib winmm.lib dmoguids.lib wmcodecdspuuid.lib msdmo.lib strmiids.lib)
-endif()
+  $<$<CONFIG:Debug>:DEBUG>
+  $<$<CONFIG:Debug>:_DEBUG>
+
+)
 
 install(TARGETS mediasoupclient DESTINATION lib)
 install(FILES ${HEADER_FILES} DESTINATION include/mediasoupclient)
